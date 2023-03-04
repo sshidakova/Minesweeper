@@ -1,3 +1,4 @@
+// расставляем числа по полю
 export default function setCellProp(cells, rowParam, colParam, property, value) {
   return cells.map((row, rowIndex) => row.map((cell, colIndex) => {
     if (rowParam === rowIndex && colParam === colIndex) {

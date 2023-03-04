@@ -1,10 +1,11 @@
 // создание игрового поля
-const generateCells = () => {
+export default function generateCells() {
   const cells = [];
   for (let row = 0; row < 16; row += 1) {
     cells.push([]);
     for (let col = 0; col < 16; col += 1) {
-      cells[row].push({ bomb: false, state: 0 }); // 0 = unpressed, 1 = visible, 2 = flag
+      cells[row].push({ bomb: false, state: 0 });
+      // state 0 = не нажали, 1 = видимая, 2 = установить флаг
     }
   }
 
@@ -32,7 +33,7 @@ const generateCells = () => {
         continue;
       }
 
-      // расставляем цифры пор полю;
+      // расставляем по полю;
       let counter = 0;
       if (row > 0 && col > 0 && cells[row - 1][col - 1].bomb) {
         counter++;
@@ -64,6 +65,4 @@ const generateCells = () => {
   }
 
   return cells;
-};
-
-export default generateCells;
+}

@@ -10,7 +10,7 @@ function App() {
   const [cells, setCells] = useState(generateCells());
   const [mineCounter, setMineCounter] = useState(40);
   const [time, setTime] = useState(0);
-  const [emoji, setEmoji] = useState('😁');
+  const [emoji, setEmoji] = useState('😊');
   const [isLive, setIsLive] = useState(false);
   const [hasWon, setHasWon] = useState(false);
   const [hasLost, setHasLost] = useState(false);
@@ -30,6 +30,7 @@ function App() {
     }
   }, [time, isLive, hasWon, hasLost]);
 
+  // устанавливаем смайлик, пользователь нажал на поле, но еще не отпустил кнопку мыши
   const handleMouseDown = (e) => {
     if (hasWon || hasLost) {
       return;
@@ -41,13 +42,16 @@ function App() {
     if (hasWon || hasLost) {
       return;
     }
-    setEmoji('😁');
+    setEmoji('😊');
   };
 
-  // установливаем смалик, есди проиграли
+  // установливаем смайлик, есди проиграли
   useEffect(() => {
     if (hasLost) {
       setEmoji('😵');
+      setTimeout(() => {
+        alert('Вы проиграли! Нажмите на смайлик для перезапуска игры.');
+      }, '1000');
     }
   }, [hasLost]);
 
@@ -117,7 +121,6 @@ function App() {
       setIsLive(true);
     }
 
-    // only do something if state is zero
     if (cell.state !== 0) {
       return;
     }
@@ -131,15 +134,14 @@ function App() {
       return;
     }
 
-    // if nothing, spread
     if (cell.value === 0) {
       gameCells = openMultiple(gameCells, rowParam, colParam);
     }
-    // display number
+    // открываем цифры
     if (cell.value > 0) {
       gameCells = setCellProp(gameCells, rowParam, colParam, 'state', 1);
     }
-    // if all non-bomb spaces have been pressed, then won
+    // если все ячейки были нажаты (не наткнувшись на бомбы), то игра выиграна
     const availableNonBombSpaces = gameCells.reduce(
       (acc, row) => acc
         + row.reduce(
@@ -165,7 +167,7 @@ function App() {
     if (!isLive) return;
     const cell = cells[rowParam][colParam];
 
-    // if already visible, don't do anything
+    // если кнопки после нажатия видно, ничего не происходит
     if (cell.state === 1) {
       return;
     }
@@ -184,7 +186,7 @@ function App() {
     setMineCounter(mineCounter + 1);
   };
 
-  // при клике на смайлик, перезапускать игру
+  // при клике на смайлик, перезапускать игру и обнуление таймера
   const handleEmojiClick = (e) => {
     e.preventDefault();
     if (isLive) {
@@ -194,7 +196,7 @@ function App() {
       setTime(0);
       setHasLost(false);
       setHasWon(false);
-      setEmoji('😁');
+      setEmoji('😊');
     }
   };
 
@@ -219,9 +221,7 @@ function App() {
       <div className="Header">
         <NumberDisplay value={mineCounter} />
         <div className="Emoji" onClick={handleEmojiClick}>
-          <span role="img" aria-label="smiley">
-            {emoji}
-          </span>
+          {emoji}
         </div>
         <NumberDisplay value={time} />
       </div>

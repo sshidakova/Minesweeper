@@ -1,7 +1,7 @@
 import setCellProp from './setCellProp';
 
+// логика открытия ячеек
 export default function openMultiple(cellsParam, rowParam, colParam) {
-  // open current cell first
   let newCells = setCellProp(cellsParam, rowParam, colParam, 'state', 1);
 
   const topLeftCell = rowParam > 0 && colParam > 0
